@@ -115,3 +115,6 @@ dmypy.json
 
 # Configure
 config.json
+
+#Tests
+Tests/
