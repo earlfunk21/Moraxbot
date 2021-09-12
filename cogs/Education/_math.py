@@ -27,6 +27,8 @@ class Statistics:
         for item, count in zip(self.scores, shows):
             if count == max_count and item not in modeList:
                 modeList.append(item)
+        if modeList == self.scores:
+            return None
         return modeList
 
 # # Mean
