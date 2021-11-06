@@ -1,6 +1,5 @@
 import json
 import traceback
-import time
 
 
 def config(filename: str = "config"):
@@ -12,8 +11,9 @@ def config(filename: str = "config"):
         raise FileNotFoundError("JSON file wasn't found")
 
 
-""" debug your code anywhere """
 def trace_back(err, advance: bool = True):
+    """ debug your code anywhere """
     _traceback = ''.join(traceback.format_tb(err.__traceback__))
-    error = ('```py\n{1}{0}: {2}\n```').format(type(err).__name__, _traceback, err)
+    error = '```py\n{1}{0}: {2}\n```'.format(type(err).__name__, _traceback, err)
     return error if advance else f"{type(err).__name__}: {err}"
+

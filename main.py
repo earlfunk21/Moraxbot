@@ -1,7 +1,7 @@
 import os
 import discord
 from discord.ext.commands import Bot
-from utils import config, HelpCommand
+from utils import config
 
 owner = config()["owner"]
 Morax = Bot(
@@ -9,17 +9,29 @@ Morax = Bot(
     owner_id=owner,
     intents=discord.Intents.all(),
     allowed_mentions=discord.AllowedMentions(roles=False, users=True, everyone=False),
-    help_command=HelpCommand(),
     command_attrs=dict(hidden=True)
     )
+
+
+@Morax.event
+async def on_member_join(member):
+    channel = member.guild.system_channel
+    if channel is not None:
+        embed = discord.Embed(title=f"Hi! {member.name}")
+        embed.add_field(name="Welcome to the Morax server",
+                        value='use "-help" if you want help')
+        embed.set_image(url=member.avatar_url)
+        await channel.send(embed=embed)
+
 
 @Morax.event
 async def on_ready():
     print("Moraxbot is Ready!!!")
 
 
-for file in os.listdir("cogs"):
-    Morax.load_extension(f"cogs.{file}")
+for filename in os.listdir("cogs"):
+    if filename.endswith(".py"):
+        Morax.load_extension(f"cogs.{filename[:-3]}")
 
 if __name__=="__main__":
     try:

@@ -1,5 +1,5 @@
 import sqlite3
-
+import struct
 
 class ComputerSystem:
     def __init__(self) -> None:
@@ -96,4 +96,4 @@ class ComputerSystem:
             total += i*(base**expo)
             expo += 1
         return total
-    
+

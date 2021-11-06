@@ -2,7 +2,7 @@ from typing import List
 
 
 class Statistics:
-    def __init__(self, scores) -> List:
+    def __init__(self, scores) -> list:
         self.scores = scores
         self.scores.sort()
         
