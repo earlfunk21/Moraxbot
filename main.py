@@ -3,10 +3,8 @@ import discord
 from discord.ext.commands import Bot
 from utils import config
 
-owner = config()["owner"]
 Morax = Bot(
     command_prefix="-",
-    owner_id=owner,
     intents=discord.Intents.all(),
     allowed_mentions=discord.AllowedMentions(roles=False, users=True, everyone=False),
     command_attrs=dict(hidden=True)
