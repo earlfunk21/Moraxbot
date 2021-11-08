@@ -9,11 +9,26 @@ from discord.ext import commands
 from utils import trace_back, is_owner
 
 
+async def in_admin_channel(ctx):
+    if ctx.channel == discord.utils.get(ctx.guild.channels, name="admin"):
+        return True
+    else:
+        pass
+
+
+async def in_server_management_channel(ctx):
+    if ctx.channel == discord.utils.get(ctx.guild.channels, name="server_management"):
+        return True
+    else:
+        pass
+
+
 class Admin(commands.Cog):
     def __init__(self, morax) -> None:
         self.morax = morax
 
     @commands.check(is_owner)
+    @commands.check(in_server_management_channel)
     @commands.command()
     async def load(self, ctx, directory: str) -> None:
         """ Load a Cog extension"""
@@ -25,6 +40,7 @@ class Admin(commands.Cog):
             await channel.send(trace_back(err))
 
     @commands.check(is_owner)
+    @commands.check(in_server_management_channel)
     @commands.command()
     async def unload(self, ctx, directory: str) -> None:
         """ Unload a Cog extension"""
@@ -36,6 +52,7 @@ class Admin(commands.Cog):
             await channel.send(trace_back(err))
 
     @commands.check(is_owner)
+    @commands.check(in_server_management_channel)
     @commands.command()
     async def reload(self, ctx, directory: str) -> None:
         """ Reload a Cog extension"""
@@ -47,6 +64,7 @@ class Admin(commands.Cog):
             await channel.send(trace_back(err))
 
     @commands.check(is_owner)
+    @commands.check(in_server_management_channel)
     @commands.command()
     async def reloadUtils(self, ctx, name: str) -> None:
         """ Reload a Utils module """
@@ -59,6 +77,7 @@ class Admin(commands.Cog):
             await channel.send(trace_back(err))
 
     @commands.check(is_owner)
+    @commands.check(in_server_management_channel)
     @commands.command(help=" - logging off", aliases=["close", "poweroff", "turnoff, logoff"])
     async def logout(self, ctx):
         """ Morax-bot is logging off """
@@ -66,7 +85,7 @@ class Admin(commands.Cog):
         time.sleep(1)
         sys.exit(0)
 
-    @commands.check(is_owner)
+    @commands.check(in_server_management_channel)
     @commands.command(help=" - Send a messasge to the User", aliases=["send", "dm"])
     async def pm(self, ctx, user: discord.User, *, message: str):
         """ Sending a message to Specific User"""
@@ -77,7 +96,8 @@ class Admin(commands.Cog):
             channel = discord.utils.get(ctx.guild.channels, name="errors")
             await channel.send(trace_back(err))
 
-    @commands.check(is_owner)
+    @commands.guild_only()
+    @commands.check(in_server_management_channel)
     @commands.command()
     async def kick(self, ctx, user: discord.User, *, reason: str = None):
         """ Kicking a member"""
@@ -89,6 +109,8 @@ class Admin(commands.Cog):
             channel = discord.utils.get(ctx.guild.channels, name="errors")
             await channel.send(trace_back(err))
 
+    @commands.guild_only()
+    @commands.check(in_server_management_channel)
     @commands.check(is_owner)
     @commands.command()
     async def ban(self, ctx, user: discord.User, *, reason: str = "Nothing"):
@@ -100,6 +122,8 @@ class Admin(commands.Cog):
             channel = discord.utils.get(ctx.guild.channels, name="errors")
             await channel.send(trace_back(err))
 
+    @commands.guild_only()
+    @commands.check(in_server_management_channel)
     @commands.check(is_owner)
     @commands.command()
     async def unban(self, ctx, user: discord.User, *, reason: str = "Nothing"):
@@ -111,6 +135,7 @@ class Admin(commands.Cog):
             channel = discord.utils.get(ctx.guild.channels, name="errors")
             await channel.send(trace_back(err))
 
+    @commands.guild_only()
     @commands.command()
     async def banList(self, ctx):
         """ Show Ban list"""
@@ -120,9 +145,12 @@ class Admin(commands.Cog):
             user = dict_bans[0].get('user')
             await ctx.send(user)
         except Exception as err:
+            if isinstance(err, IndexError):
+                await ctx.send("None")
             channel = discord.utils.get(ctx.guild.channels, name="errors")
             await channel.send(trace_back(err))
 
+    @commands.guild_only()
     @commands.command(aliases=["cn"])
     async def changeNickname(self, ctx, *, name: str = None):
         """ Change nickname. """
@@ -135,6 +163,34 @@ class Admin(commands.Cog):
         except Exception as err:
             channel = discord.utils.get(ctx.guild.channels, name="errors")
             await channel.send(trace_back(err))
+
+    @commands.check(is_owner)
+    @commands.guild_only()
+    @commands.command()
+    async def setUp(self, ctx, name):
+        """ setting up the commands"""
+        category = discord.utils.get(ctx.guild.channels, name="Commands")
+        role = discord.utils.get(ctx.guild.roles, name="Moderator")
+        if role not in ctx.guild.roles:
+            await ctx.guild.create_role(name="Moderator", colour=discord.Colour.random(), hoist=True)
+        if category not in ctx.guild.channels:
+            overwrites = {
+                ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, connect=False),
+                role: discord.PermissionOverwrite(read_messages=True, send_messages=True, connect=True)
+            }
+            category = await ctx.guild.create_category("Commands", overwrites=overwrites, reason=None)
+        try:
+            if name == "admin":
+                await ctx.send("Setting up management!")
+                if discord.utils.get(ctx.guild.text_channels, name="server_management") not in ctx.guild.channels:
+                    await ctx.guild.create_text_channel("server_management", overwrites=None, category=category, reason=None)
+                if discord.utils.get(ctx.guild.text_channels, name="admin") not in ctx.guild.channels:
+                    await ctx.guild.create_text_channel("admin", overwrites=None, category=category, reason=None)
+                if discord.utils.get(ctx.guild.text_channels, name="errors") not in ctx.guild.channels:
+                    await ctx.guild.create_text_channel("errors", overwrites=None, category=category, reason=None)
+                await ctx.send("Setup finished!")
+        except Exception as err:
+            await ctx.send(trace_back(err))
 
 
 def setup(morax):
