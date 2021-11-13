@@ -114,8 +114,9 @@ dmypy.json
 .pyre/
 
 # Configure
-config.json
+database/config.json
 
 #Tests
 Tests/
-config.json
+database/config.json
+

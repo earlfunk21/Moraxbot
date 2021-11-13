@@ -1,19 +1,19 @@
 import json
-import traceback
 
 
-def config(filename: str = "config"):
+def config(filename: str = "./database/config.json"):
     """ Getting a default config file """
     try:
-        with open(f"{filename}.json", encoding='utf-8') as data:
+        with open(filename, "r", encoding='utf-8') as data:
             return json.load(data)
     except FileNotFoundError:
         raise FileNotFoundError("JSON file wasn't found")
 
 
-def trace_back(err, advance: bool = True):
-    """ debug your code anywhere """
-    _traceback = ''.join(traceback.format_tb(err.__traceback__))
-    error = '```py\n{1}{0}: {2}\n```'.format(type(err).__name__, _traceback, err)
-    return error if advance else f"{type(err).__name__}: {err}"
+def saveConfig(load: str, filename: str = "./database/config.json"):
+    try:
+        with open(filename, "a") as data:
+            return json.dump(load, data, indent=2)
+    except FileNotFoundError:
+        raise FileNotFoundError("JSON file wasn't fount")
 

@@ -7,24 +7,9 @@ Morax = Bot(
     command_prefix="-",
     intents=discord.Intents.all(),
     allowed_mentions=discord.AllowedMentions(roles=False, users=True, everyone=False),
-    command_attrs=dict(hidden=True)
+    command_attrs=dict(hidden=True),
+    help_command=None,
     )
-
-
-@Morax.event
-async def on_member_join(member):
-    channel = member.guild.system_channel
-    if channel is not None:
-        embed = discord.Embed(title=f"Hi! {member.name}")
-        embed.add_field(name="Welcome to the Morax server",
-                        value='use "-help" if you want help')
-        embed.set_image(url=member.avatar_url)
-        await channel.send(embed=embed)
-
-
-@Morax.event
-async def on_ready():
-    print("Moraxbot is Ready!!!")
 
 
 for filename in os.listdir("cogs"):
