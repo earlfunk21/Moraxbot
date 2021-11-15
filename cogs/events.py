@@ -59,6 +59,7 @@ class Events(commands.Cog):
             embed = discord.Embed(title="C or CPP code")
             codes = '''```cpp\n{}\n```'''.format(message.content)
             embed.description = codes
+            embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             await message.channel.send(embed=embed)
 
     @commands.Cog.listener()
