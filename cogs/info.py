@@ -18,20 +18,21 @@ class Information(commands.Cog):
             ban_list = await ctx.guild.bans()
             dict_bans = [ban._asdict() for ban in ban_list]
             user = dict_bans[0].get('user')
-            await ctx.send(user)
+            await ctx.reply(user, mention_author=False)
         except Exception as err:
             if isinstance(err, IndexError):
-                await ctx.send("```py\nNone\n```")
+                await ctx.reply("```py\nNone\n```", mention_author=False)
 
     @commands.check(in_cmd_channel)
     @commands.command()
     async def ping(self, ctx):
         ms = str(round(self.morax.latency * 1000))
-        await ctx.reply("```css\n.{0}ms\n```".format(ms))
+        await ctx.reply("```css\n.{0}ms\n```".format(ms), mention_author=False)
 
     @commands.check(in_cmd_channel)
     @commands.command()
     async def avatar(self, ctx, member: discord.User = None):
+        """ Show your avatar """
         user = ctx.author
         if member:
             user = member
@@ -45,15 +46,16 @@ class Information(commands.Cog):
                                   )
                               )
         embed.set_image(url=avatar)
-        await ctx.reply(embed=embed)
+        await ctx.reply(embed=embed, mention_author=False)
 
     @commands.check(in_cmd_channel)
     @commands.command()
     async def roles(self, ctx):
+        """ Show list of roles """
         embed = discord.Embed(title="Roles")
         for role in ctx.guild.roles:
             embed.add_field(name=role.name, value=str([member.name for member in role.members]), inline=False)
-        await ctx.reply(embed=embed)
+        await ctx.reply(embed=embed, mention_author=False)
 
 
 def setup(morax):

@@ -1,8 +1,9 @@
 import discord
 
-from utils import default
+from utils.config import File
 
-owners = default.config()["owners"]
+config = File()
+owners = config.load()["owners"]
 
 
 def is_owner(ctx):

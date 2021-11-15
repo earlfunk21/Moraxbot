@@ -12,7 +12,7 @@ class User(commands.Cog):
     @commands.check(in_cmd_channel)
     @commands.guild_only()
     @commands.command(aliases=["cn"])
-    async def changeNickname(self, ctx, *, name: str = None):
+    async def nick(self, ctx, *, name: str = None):
         """ Change nickname. """
         await ctx.author.edit(nick=name)
         if name:
@@ -24,7 +24,8 @@ class User(commands.Cog):
     @commands.guild_only()
     @commands.check(in_cmd_channel)
     @commands.command()
-    async def bebeTime(self, ctx, member: discord.Member):
+    async def move(self, ctx, member: discord.Member):
+        """ Moving members to your voice channel """
         channel = ctx.message.author.voice.channel
         if member.voice:
             await member.move_to(channel)

@@ -35,7 +35,6 @@ class Events(commands.Cog):
                             value='use "-help" if you want help')
             embed.set_image(url=member.avatar_url)
             await channel.send(embed=embed)
-        await member.add_roles(discord.utils.get(member.guild.roles, name="Member"))
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):

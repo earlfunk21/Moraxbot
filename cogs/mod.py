@@ -18,9 +18,9 @@ class Moderator(commands.Cog):
         """ Kicking a member"""
         await ctx.guild.kick(user, reason=reason)
         if reason is not None:
-            await ctx.send(f"{user.name}\nhas been Kicked\nBecause of {reason}")
+            await ctx.reply(f"{user.name}\nhas been Kicked\nBecause of {reason}", mention_author=False)
         else:
-            await ctx.send(f"{user.name}\nhas been Kicked")
+            await ctx.reply(f"{user.name}\nhas been Kicked", mention_author=False)
 
     @commands.guild_only()
     @commands.has_role("Moderator")
@@ -30,9 +30,9 @@ class Moderator(commands.Cog):
         """ Banning a member"""
         await ctx.guild.ban(user, reason=reason)
         if reason is not None:
-            await ctx.send(f"{user.name}\nhas been Banned\nBecause of {reason}\n")
+            await ctx.reply(f"{user.name}\nhas been Banned\nBecause of {reason}\n", mention_author=False)
         else:
-            ctx.send(f"{user.name}\nhas been Banned")
+            await ctx.reply(f"{user.name}\nhas been Banned", mention_author=False)
 
     @commands.guild_only()
     @commands.has_role("Moderator")
@@ -41,7 +41,7 @@ class Moderator(commands.Cog):
     async def unban(self, ctx, user: discord.User, *, reason: str = "Nothing"):
         """ Unbanning a banned member """
         await ctx.guild.unban(user, reason=reason)
-        await ctx.send(f"{user.name}\nSuccessfully Unbanned")
+        await ctx.reply(f"{user.name}\nSuccessfully Unbanned", mention_author=False)
 
     @commands.cooldown(1, 15, commands.BucketType.user)
     @commands.has_role("Moderator")
@@ -50,25 +50,27 @@ class Moderator(commands.Cog):
     async def pm(self, ctx, user: discord.User, *, message: str):
         """ Sending a message to Specific User"""
         await user.send(message)
-        await ctx.send(f"Message send to {user}")
+        await ctx.reply(f"Message send to {user}", mention_author=False)
 
     @commands.check(in_cmd_channel)
     @commands.has_role("Moderator")
     @commands.guild_only()
     @commands.command()
     async def createRole(self, ctx, role: str):
+        """ create a role """
         create = Create(ctx.guild)
         if await create.role(role) is None:
             return await ctx.send("```py\nAlready in this guild\n```")
-        await ctx.send("```css\n.{0} has been created!\n```".format(role))
+        await ctx.reply("```css\n.{0} has been created!\n```".format(role), mention_author=False)
 
     @commands.check(in_cmd_channel)
     @commands.has_role("Moderator")
     @commands.command()
     async def addRole(self, ctx, role: discord.Role, member: discord.Member):
+        """ adding a role of a members """
         if role in ctx.guild.roles:
             await member.add_roles(role)
-            await ctx.send("```py\n{0} added to role {1}\n```".format(member, role))
+            await ctx.reply("```py\n{0} added to role {1}\n```".format(member, role), mention_author=False)
 
 
 def setup(morax):

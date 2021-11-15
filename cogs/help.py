@@ -27,7 +27,7 @@ class HelpCommand(commands.MinimalHelpCommand):
                     continue
                 name = cog.qualified_name if cog else "No Category"
                 cmd_list = "\u2002".join(
-                    f"`|{cmd.name}`" for cmd in filtered
+                    f"`-{cmd.name}`" for cmd in filtered
                 )
                 value = (
                     f"Prefix\"-\" ex. -help\n{cog.description}\n{cmd_list}"
@@ -55,7 +55,12 @@ class HelpCommand(commands.MinimalHelpCommand):
         await self.get_destination().send(embed=embed)
 
     async def send_cog_help(self, cog):
-        pass
+        embed = await self._help_embed(
+            title=cog.qualified_name,
+            description=cog.description,
+            command_set=cog.get_commands()
+        )
+        await self.get_destination().send(embed=embed)
 
 
 class HelpCog(commands.Cog, name="Help"):
