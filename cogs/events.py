@@ -51,6 +51,17 @@ class Events(commands.Cog):
                 await create.bebeTime(member, after)
 
     @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author == self.morax:
+            return
+        if message.content.startswith("#include"):
+            await message.delete()
+            embed = discord.Embed(title="C or CPP code")
+            codes = '''```cpp\n{}\n```'''.format(message.content)
+            embed.description = codes
+            await message.channel.send(embed=embed)
+
+    @commands.Cog.listener()
     async def on_ready(self):
         print("Morax bot is Ready!!!")
 
