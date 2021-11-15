@@ -35,6 +35,7 @@ class HelpCommand(commands.MinimalHelpCommand):
                     else cmd_list
                 )
                 embed.add_field(name=name, value=value, inline=False)
+        embed.set_author(name=self.context.author.name, icon_url=self.context.author.avatar_url)
         return embed
 
     async def send_bot_help(self, mapping: dict):

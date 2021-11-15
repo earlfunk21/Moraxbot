@@ -27,7 +27,7 @@ class Information(commands.Cog):
     @commands.command()
     async def ping(self, ctx):
         ms = str(round(self.morax.latency * 1000))
-        await ctx.send("```css\n.{0}ms\n```".format(ms))
+        await ctx.reply("```css\n.{0}ms\n```".format(ms))
 
     @commands.check(in_cmd_channel)
     @commands.command()
@@ -45,15 +45,15 @@ class Information(commands.Cog):
                                   )
                               )
         embed.set_image(url=avatar)
-        await ctx.send(embed=embed)
+        await ctx.reply(embed=embed)
 
     @commands.check(in_cmd_channel)
     @commands.command()
     async def roles(self, ctx):
         embed = discord.Embed(title="Roles")
         for role in ctx.guild.roles:
-            embed.add_field(name=role.name, value=f"ID: {role.id}", inline=False)
-        await ctx.send(embed=embed)
+            embed.add_field(name=role.name, value=str([member.name for member in role.members]), inline=False)
+        await ctx.reply(embed=embed)
 
 
 def setup(morax):

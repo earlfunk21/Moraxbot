@@ -65,7 +65,7 @@ class Moderator(commands.Cog):
     @commands.check(in_cmd_channel)
     @commands.has_role("Moderator")
     @commands.command()
-    async def joinRole(self, ctx, role: discord.Role, member: discord.Member):
+    async def addRole(self, ctx, role: discord.Role, member: discord.Member):
         if role in ctx.guild.roles:
             await member.add_roles(role)
             await ctx.send("```py\n{0} added to role {1}\n```".format(member, role))

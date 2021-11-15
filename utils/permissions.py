@@ -15,3 +15,7 @@ async def in_cmd_channel(ctx):
         return True
     else:
         pass
+
+
+async def in_voice_channel(ctx):
+    return ctx.author.voice
