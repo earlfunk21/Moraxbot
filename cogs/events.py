@@ -13,9 +13,6 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         create = Create(guild)
-        await create.role("Moderator")
-        voiceCategory = await create.category("Voice Channels")
-        await create.voiceChannel("BebeTime", category=voiceCategory)
         moraxCategory = await create.category("Morax-Commands")
         await create.textChannel("morax-cmd", category=moraxCategory)
         overwrites = {
@@ -31,7 +28,7 @@ class Events(commands.Cog):
         channel = member.guild.system_channel
         if channel is not None:
             embed = discord.Embed(title=f"Hi! {member.name}")
-            embed.add_field(name="Welcome to the Morax server",
+            embed.add_field(name="Welcome to the Kulto De Morax",
                             value='use "-help" if you want help')
             embed.set_image(url=member.avatar_url)
             await channel.send(embed=embed)
@@ -39,8 +36,8 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if before.channel is not None:
-            if before.channel.category != discord.utils.get(before.channel.guild.categories,
-                                                            name="Voice Channels"):
+            if before.channel.category == discord.utils.get(before.channel.guild.categories,
+                                                            name="Private Rooms 🔇"):
                 if len(before.channel.members) == 0:
                     await before.channel.delete()
 
@@ -55,7 +52,7 @@ class Events(commands.Cog):
             return
         if message.content.startswith("#include"):
             await message.delete()
-            embed = discord.Embed(title="C or CPP code")
+            embed = discord.Embed(title="C or C++")
             codes = '''```cpp\n{}\n```'''.format(message.content)
             embed.description = codes
             embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)

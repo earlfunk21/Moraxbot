@@ -52,7 +52,6 @@ class Create(object):
                        member,
                        after
                        ):
-        create = Create(after.channel.guild)
         rand = []
         for _ in range(5):
             rand.append(random.choice(string.ascii_letters))
@@ -62,6 +61,7 @@ class Create(object):
                                                                           view_channel=False),
             member: discord.PermissionOverwrite(connect=True, view_channel=True)
         }
-        channel = await create.voiceChannel(name,
-                                            overwrites=overwrites)
+        category = discord.utils.get(after.channel.guild.categories, name="Private Rooms 🔇")
+        channel = await self.voiceChannel(name,
+                                          overwrites=overwrites, category=category)
         await member.move_to(channel)

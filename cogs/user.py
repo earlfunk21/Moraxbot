@@ -1,4 +1,3 @@
-
 import discord
 from discord.ext import commands
 
@@ -8,17 +7,6 @@ from utils.permissions import in_cmd_channel, in_voice_channel
 class User(commands.Cog):
     def __init__(self, morax):
         self.morax = morax
-
-    @commands.check(in_cmd_channel)
-    @commands.guild_only()
-    @commands.command(aliases=["cn"])
-    async def nick(self, ctx, *, name: str = None):
-        """ Change nickname. """
-        await ctx.author.edit(nick=name)
-        if name:
-            await ctx.reply(f"Successfully changed nickname to **{name}**")
-        else:
-            await ctx.reply("Successfully removed nickname")
 
     @commands.check(in_voice_channel)
     @commands.guild_only()
@@ -31,6 +19,15 @@ class User(commands.Cog):
             await member.move_to(channel)
         else:
             return await ctx.reply("```You or the member you mention are not connected to a voice channel```")
+
+    @commands.check(in_voice_channel)
+    @commands.guild_only()
+    @commands.check(in_cmd_channel)
+    @commands.command()
+    async def join(self, ctx, channel: discord.VoiceChannel):
+        """ join to another voice channel """
+        await ctx.message.delete()
+        await ctx.author.move_to(channel)
 
 
 def setup(morax):
