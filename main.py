@@ -18,6 +18,6 @@ for filename in os.listdir("cogs"):
 
 if __name__ == "__main__":
     try:
-        Morax.run("ODU3NDk0Mzg4MTg0MDU1ODE4.YNQZ4Q.DJmzPl14b8lwgxrE2zSgplHlqak")
+        Morax.run(os.environ["token"])
     except Exception as e:
         print(f"Error when logging in {e}")
