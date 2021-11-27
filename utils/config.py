@@ -3,7 +3,7 @@ import os
 
 
 class File:
-    def __init__(self, directory: str = "./database", filename: str = "config.json"):
+    def __init__(self, directory: str = "database", filename: str = "config.json"):
         self.directory = directory
         self.filename = filename
 
